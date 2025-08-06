@@ -1,123 +1,165 @@
-## 🛍️ Fancy Store Web App – Google Cloud Deployment
 
-Welcome to the Fancy Store repository! This web app is deployed on Google Cloud Platform using Compute Engine instances and other GCP services to ensure scalability, security, and performance.
+```markdown
+# 🛍️ Fancy Store Web App – Google Cloud Deployment
 
----
-
-### 🚀 Overview
-
-**Fancy Store** is a modern e-commerce web application designed with modular microservices for frontend and backend. The infrastructure uses:
-
-- Google Compute Engine VMs
-- Instance Templates
-- Managed Instance Groups (MIGs)
-- Load Balancer with CDN
-- Cloud Storage for code & scripts
-- Firewall Rules
-- Health Checks & Autohealing
-- Startup script automation
-
+This project showcases the deployment of the **Fancy Store** e-commerce web application using **Google Cloud Platform (GCP)** services. It implements scalable architecture using Compute Engine, Cloud Storage, Managed Instance Groups, Load Balancing, and Infrastructure as Code principles.
 
 ---
 
-### 🧱 Architecture Components
+## 🚀 Project Overview
 
-| Component | Description |
-|----------|-------------|
-| **Frontend MIG** | Serves the web UI, auto-scalable & autohealed |
-| **Backend MIG** | Handles business logic and database access |
-| **Load Balancer** | Path-based routing (`/api/` → backend, `/` → frontend) |
-| **CDN** | Cache frontend assets for faster delivery |
-| **Cloud Storage** | Hosts startup scripts and source code |
-| **Instance Templates** | Used to standardize frontend/backend VM creation |
-| **Firewall Rules** | Allow TCP traffic on HTTP/HTTPS ports |
-| **Health Checks** | Monitor VM health for autohealing |
-| **Startup Scripts** | Bootstrap servers on launch |
+Fancy Store is built with microservices: frontend, orders, and products. The infrastructure delivers:
 
+- Auto-scalable VM instances for frontend and backend
+- Load balancer with path-based routing
+- CDN acceleration for frontend
+- Cloud Storage for code and startup scripts
+- Health checks and autohealing
+- Secure configuration with firewall rules and no public IPs
 
 ---
 
-### ⚙️ Setup Instructions
+## 🧱 Architecture Diagram
 
-#### 1. Clone the Repository
-```bash
-git clone https://github.com/your-org/fancy-store.git
-cd fancy-store
+📌 Use this Eraser prompt to visualize the architecture:
+
+```
+Draw a detailed architecture diagram for hosting the "Fancy Store" web app on Google Cloud using Compute Engine. Include: Cloud Storage for source code and startup scripts, Compute Engine instances for frontend and backend microservices, Instance Templates, Managed Instance Groups with autohealing and autoscaling, HTTP(S) Load Balancer with path-based routing, CDN for frontend caching, and firewall rules for port access. Visualize health checks and startup script automation. Show public and internal IP flow between components.
 ```
 
-#### 2. Upload Assets to Cloud Storage
+---
+
+## ⚙️ Step-by-Step Setup Instructions
+
+### 1️⃣ Enable Required APIs
 ```bash
-gsutil cp ./scripts/startup-script.sh gs://your-bucket/
+gcloud services enable compute.googleapis.com
+gcloud services enable cloudasset.googleapis.com
 ```
 
-#### 3. Create Instance Templates
-Frontend:
+### 2️⃣ Create Cloud Storage Bucket
+Used to store startup scripts and application code.
+```bash
+gsutil mb gs://your-bucket-name/
+gsutil cp ./scripts/startup-script.sh gs://your-bucket-name/
+```
+
+### 3️⃣ Clone the Source Code
+```bash
+git clone https://github.com/googlecodelabs/monolith-to-microservices.git
+cd monolith-to-microservices/microservices
+```
+
+---
+
+## 🧩 VM & Instance Configuration
+
+### 4️⃣ Create Frontend Instance Template
 ```bash
 gcloud compute instance-templates create fancy-fe \
   --machine-type=e2-standard-2 \
-  --metadata=startup-script-url=https://storage.googleapis.com/your-bucket/startup-script.sh \
+  --metadata=startup-script-url=https://storage.googleapis.com/your-bucket-name/startup-script.sh \
   --tags=frontend \
   --image-family=debian-11 --image-project=debian-cloud
 ```
 
-Backend:
+### 5️⃣ Create Backend Instance Template
 ```bash
 gcloud compute instance-templates create fancy-be \
   --machine-type=e2-standard-2 \
-  --metadata=startup-script-url=https://storage.googleapis.com/your-bucket/backend-script.sh \
+  --metadata=startup-script-url=https://storage.googleapis.com/your-bucket-name/backend-script.sh \
   --tags=backend \
   --image-family=debian-11 --image-project=debian-cloud
 ```
 
-#### 4. Create MIGs
+---
+
+## 🚀 Deploy Managed Instance Groups
+
+### 6️⃣ Frontend MIG
 ```bash
 gcloud compute instance-groups managed create fancy-frontend-group \
   --base-instance-name=fancy-fe \
   --template=fancy-fe \
   --size=2 --zone=us-central1-a
+```
 
+### 7️⃣ Backend MIG
+```bash
 gcloud compute instance-groups managed create fancy-backend-group \
   --base-instance-name=fancy-be \
   --template=fancy-be \
   --size=2 --zone=us-central1-a
 ```
 
-#### 5. Create Health Checks
+---
+
+## 🌐 Load Balancer & Health Checks
+
+### 8️⃣ Create Health Check
 ```bash
 gcloud compute health-checks create http fancy-health-check \
   --port 80 --request-path=/healthz
 ```
 
-#### 6. Setup Load Balancer & CDN (skip details here—can generate full config if needed)
+### 9️⃣ Create Backend Services & Attach MIGs
+Attach the managed instance groups to the load balancer backend services with health checks.
 
+### 🔟 Configure URL Map for Routing
+- `/` → Frontend
+- `/api/orders` and `/api/products` → Backend
 
----
-
-### 🧪 Testing & Validation
-
-- Use `curl`, `Postman`, or browser to test frontend endpoint
-- Validate Load Balancer routing: `/ → frontend`, `/api → backend`
-- Simulate instance failure to verify autohealing
-
----
-
-### 🌐 Useful GCP Commands
-
-- Describe template:
-  ```bash
-  gcloud compute instance-templates describe fancy-fe --format=json
-  ```
-- View Load Balancer config:
-  ```bash
-  gcloud compute forwarding-rules list
-  ```
+### 1️⃣1️⃣ Create Forwarding Rule
+This gives the system a public IP:
+```bash
+gcloud compute forwarding-rules create fancy-lb-forwarding-rule \
+  --load-balancing-scheme=EXTERNAL \
+  --port-range=80 \
+  --address=<STATIC_EXTERNAL_IP> \
+  --global
+```
 
 ---
 
-### 🔒 Security Notes
+## 🔒 Firewall Rules
 
-- Only expose necessary ports
-- Validate startup scripts
-- Use GCP IAM for access control
+Allow HTTP(S) traffic only to Load Balancer:
+```bash
+gcloud compute firewall-rules create allow-http \
+  --allow=tcp:80 \
+  --target-tags=frontend,backend
+```
 
+---
 
+## 📌 Access & Testing
+
+- Access the app via the external IP of the **load balancer**
+- Use port 8080 for frontend preview if running locally
+- Backend services exposed at `/api/orders` and `/api/products`
+- No public IPs for individual VMs — secure and isolated
+
+---
+
+## 📐 Infrastructure as Code
+
+You can recreate this setup using Terraform for portability and versioning. Let me know if you want the `.tf` files generated and structured by service!
+
+---
+
+## 🧪 Troubleshooting Tips
+
+- Check `gcloud config list` for active project and region
+- Verify instance group attachment to backend service
+- Validate startup script logs via Stackdriver Logging
+- Use `gcloud compute instances list` to inspect VM status
+
+---
+
+## ✍️ Author
+
+**Omar Ibrahem**  
+Cloud Engineer & App Developer  
+[GitHub Profile](https://github.com/Omariibrahem)
+
+---
