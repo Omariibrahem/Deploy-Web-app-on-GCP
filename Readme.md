@@ -16,7 +16,7 @@ Welcome to the Fancy Store repository! This web app is deployed on Google Cloud 
 - Firewall Rules
 - Health Checks & Autohealing
 - Startup script automation
-- MQTT for real-time data
+
 
 ---
 
@@ -33,7 +33,7 @@ Welcome to the Fancy Store repository! This web app is deployed on Google Cloud 
 | **Firewall Rules** | Allow TCP traffic on HTTP/HTTPS ports |
 | **Health Checks** | Monitor VM health for autohealing |
 | **Startup Scripts** | Bootstrap servers on launch |
-| **MQTT Broker** | Enables real-time communication between services |
+
 
 ---
 
@@ -136,3 +136,4 @@ fancy-store/
 - Only expose necessary ports
 - Validate startup scripts
 - Use GCP IAM for access control
+
