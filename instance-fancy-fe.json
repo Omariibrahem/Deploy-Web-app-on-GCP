@@ -1,33 +1,3 @@
-                        +--------------------------+
-                        |   Cloud Storage Bucket   |
-                        |  (Startup Scripts & Code)|
-                        +-----------+--------------+
-                                    |
-                                    v
-                        +-----------+--------------+
-                        | Compute Engine Instances |
-                        |  - Backend Microservices |
-                        |  - Frontend Web Server   |
-                        +-----------+--------------+
-                                    |
-                                    v
-              +---------------------------------------------+
-              |       Managed Instance Groups (MIGs)        |
-              |  - Autohealing, Autoscaling, Rolling Update |
-              +-------------------+-------------------------+
-                                  |
-                                  v
-                   +-------------------------------+
-                   |     HTTP(S) Load Balancer     |
-                   |  - Health Checks & Traffic    |
-                   |  - CDN Caching (optional)     |
-                   +-------------------------------+
-                                  |
-                                  v
-                     +---------------------------+
-                     |     Web App Users         |
-                     |  (Access via Frontend IP) |
-                     +---------------------------+
 
 {
   "creationTimestamp": "2025-08-06T10:53:45.270-07:00",
@@ -141,3 +111,4 @@
   },
   "selfLink": "https://www.googleapis.com/compute/v1/projects/qwiklabs-gcp-01-34cd354901ab/global/instanceTemplates/fancy-fe"
 }
+
