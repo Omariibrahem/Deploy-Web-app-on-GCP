@@ -90,23 +90,6 @@ gcloud compute health-checks create http fancy-health-check \
 
 #### 6. Setup Load Balancer & CDN (skip details here—can generate full config if needed)
 
----
-
-### 📦 Project Structure
-
-```text
-fancy-store/
-├── frontend/
-│   └── index.html
-├── backend/
-│   └── server.py
-├── scripts/
-│   ├── startup-script.sh
-│   └── backend-script.sh
-├── terraform/
-│   └── main.tf
-└── README.md
-```
 
 ---
 
@@ -136,4 +119,5 @@ fancy-store/
 - Only expose necessary ports
 - Validate startup scripts
 - Use GCP IAM for access control
+
 
