@@ -159,7 +159,8 @@ You can recreate this setup using Terraform for portability and versioning. Let 
 ## ✍️ Author
 
 **Omar Ibrahem**  
-Cloud Engineer & App Developer  
+Cloud Engineer 
 [GitHub Profile](https://github.com/Omariibrahem)
 
 ---
+
