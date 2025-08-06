@@ -1,6 +1,34 @@
-Sure thing, Omar! Here's a detailed documentation file for your **Fancy Store Web App on Google Cloud Using Compute Engine**. You can save this as `DOCUMENTATION.md` or adapt it into a design doc in Eraser:
+                        +--------------------------+
+                        |   Cloud Storage Bucket   |
+                        |  (Startup Scripts & Code)|
+                        +-----------+--------------+
+                                    |
+                                    v
+                        +-----------+--------------+
+                        | Compute Engine Instances |
+                        |  - Backend Microservices |
+                        |  - Frontend Web Server   |
+                        +-----------+--------------+
+                                    |
+                                    v
+              +---------------------------------------------+
+              |       Managed Instance Groups (MIGs)        |
+              |  - Autohealing, Autoscaling, Rolling Update |
+              +-------------------+-------------------------+
+                                  |
+                                  v
+                   +-------------------------------+
+                   |     HTTP(S) Load Balancer     |
+                   |  - Health Checks & Traffic    |
+                   |  - CDN Caching (optional)     |
+                   +-------------------------------+
+                                  |
+                                  v
+                     +---------------------------+
+                     |     Web App Users         |
+                     |  (Access via Frontend IP) |
+                     +---------------------------+
 
----
 
 # 📘 Fancy Store Web App – Infrastructure Documentation
 
@@ -98,6 +126,3 @@ fancy-store/
 - Weekly patching via VM Manager
 - Audit logs for IAM and network actions
 
----
-
-Want me to convert this into a Terraform README or include cost optimization tips as well?
