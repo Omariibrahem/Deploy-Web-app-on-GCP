@@ -1,0 +1,103 @@
+Sure thing, Omar! Here's a detailed documentation file for your **Fancy Store Web App on Google Cloud Using Compute Engine**. You can save this as `DOCUMENTATION.md` or adapt it into a design doc in Eraser:
+
+---
+
+# 📘 Fancy Store Web App – Infrastructure Documentation
+
+## 📌 Project Summary
+
+**Fancy Store** is a scalable e-commerce web application hosted on Google Cloud, using Compute Engine virtual machines within Managed Instance Groups (MIGs). It leverages Cloud Storage for scripts/code, HTTP(S) Load Balancing with CDN, and real-time data updates via MQTT.
+
+---
+
+## 🧠 Design Goals
+
+- Scalable microservice architecture (frontend & backend)
+- High availability through autohealing MIGs
+- Fast frontend delivery with CDN caching
+- Real-time backend messaging with MQTT
+- Automated VM provisioning via startup scripts
+- Infrastructure-as-Code (IaC) compatibility using Terraform or Deployment Manager
+
+---
+
+## 🧱 Infrastructure Components
+
+### ☁️ Google Cloud Resources
+
+| Component             | Purpose                                                   |
+|----------------------|-----------------------------------------------------------|
+| Compute Engine (VMs) | Hosts microservices                                        |
+| Instance Templates    | Reusable VM configurations                                 |
+| Managed Instance Groups | Auto-scaling and autohealing clusters                  |
+| HTTP(S) Load Balancer | Routes traffic to frontend/backend services               |
+| CDN                   | Caches static frontend assets                             |
+| Cloud Storage         | Stores code and startup scripts                          |
+| Firewall Rules        | Controls incoming traffic                                 |
+| Health Checks         | Monitors instance health for load balancing               |
+| MQTT Broker (Cloud IoT Core or custom VM) | Enables live data push               |
+
+---
+
+## ⚙️ Deployment Workflow
+
+1. **Prepare startup scripts** and upload to a Cloud Storage bucket.
+2. **Create instance templates** for frontend and backend using startup-script URLs.
+3. **Set up Managed Instance Groups** for horizontal scalability.
+4. **Configure HTTP(S) Load Balancer** with path rules:
+   - `/ → Frontend`
+   - `/api → Backend`
+5. **Enable CDN** for caching frontend assets.
+6. **Apply firewall rules** to expose ports (80/443) and restrict others.
+7. **Configure MQTT service** for backend status updates and control messages.
+
+---
+
+## 📦 Code Organization
+
+```text
+fancy-store/
+├── frontend/
+│   └── index.html
+├── backend/
+│   └── server.py
+├── scripts/
+│   ├── startup-script.sh
+│   └── backend-script.sh
+├── terraform/
+│   └── main.tf
+└── DOCUMENTATION.md
+```
+
+---
+
+## 🧪 Testing Checklist
+
+- ✅ Load Balancer correctly routes paths
+- ✅ Autohealing MIGs recover failed instances
+- ✅ MQTT messages received and handled by backend
+- ✅ CDN cache performance validated using web analytics tools
+- ✅ Instances boot with correct startup configuration
+
+---
+
+## 🛡️ Security Measures
+
+- Limit firewall access by IP ranges and ports
+- Store secrets securely in Secret Manager
+- Review IAM roles for least-privilege access
+- Validate input/output at backend endpoints
+- Monitor using Stackdriver or Cloud Monitoring
+
+---
+
+## 🔁 Maintenance & Monitoring
+
+- Stackdriver alerts on VM health and load balancer status
+- Use `gcloud` or Terraform for updates
+- Weekly patching via VM Manager
+- Audit logs for IAM and network actions
+
+---
+
+Want me to convert this into a Terraform README or include cost optimization tips as well?
