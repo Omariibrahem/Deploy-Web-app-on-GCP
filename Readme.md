@@ -16,17 +16,7 @@ Fancy Store is built with microservices: frontend, orders, and products. The inf
 - Cloud Storage for code and startup scripts
 - Health checks and autohealing
 - Secure configuration with firewall rules and no public IPs
-
----
-
-## 🧱 Architecture Diagram
-
-📌 Use this Eraser prompt to visualize the architecture:
-
-```
-Draw a detailed architecture diagram for hosting the "Fancy Store" web app on Google Cloud using Compute Engine. Include: Cloud Storage for source code and startup scripts, Compute Engine instances for frontend and backend microservices, Instance Templates, Managed Instance Groups with autohealing and autoscaling, HTTP(S) Load Balancer with path-based routing, CDN for frontend caching, and firewall rules for port access. Visualize health checks and startup script automation. Show public and internal IP flow between components.
-```
-
+
 ---
 
 ## ⚙️ Step-by-Step Setup Instructions
